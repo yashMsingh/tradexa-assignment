@@ -1,0 +1,515 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Create and view posts — Tradexa Assignment">
+    <title>Create Post — Tradexa Assignment</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+        *,
+        *::before,
+        *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --white: #ffffff;
+            --green: #16a34a;
+            --green-bg: #f0fdf4;
+            --blue: #2563eb;
+            --blue-d: #1d4ed8;
+            --blue-bg: #eff6ff;
+            --gray-50: #f8fafc;
+            --gray-100: #f1f5f9;
+            --gray-200: #e2e8f0;
+            --gray-400: #94a3b8;
+            --gray-500: #64748b;
+            --gray-800: #1e293b;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--gray-50);
+            color: var(--gray-800);
+            min-height: 100vh;
+        }
+
+        /* ── Top stripe ── */
+        .top-stripe {
+            height: 4px;
+            background: var(--green);
+        }
+
+        /* ── Header ── */
+        header {
+            background: var(--white);
+            border-bottom: 1px solid var(--gray-200);
+            padding: 0;
+        }
+
+        .header-inner {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 14px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .header-logo-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 8px;
+            background: var(--green);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .header-logo-icon svg {
+            width: 18px;
+            height: 18px;
+            fill: none;
+            stroke: var(--white);
+            stroke-width: 2.2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .header-logo h1 {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-800);
+            letter-spacing: -0.3px;
+        }
+
+        .header-right {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .user-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: var(--blue-bg);
+            border: 1px solid #bfdbfe;
+            border-radius: 6px;
+            padding: 6px 10px;
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--blue-d);
+        }
+
+        .user-badge svg {
+            width: 14px;
+            height: 14px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .logout-btn {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #fef2f2;
+            border: 1px solid #fca5a5;
+            border-radius: 6px;
+            padding: 6px 12px;
+            font-size: 13px;
+            font-weight: 500;
+            color: #b91c1c;
+            text-decoration: none;
+            transition: background 0.15s;
+        }
+
+        .logout-btn:hover {
+            background: #fee2e2;
+        }
+
+        .logout-btn svg {
+            width: 13px;
+            height: 13px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2.2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* ── Main layout ── */
+        main {
+            max-width: 800px;
+            margin: 32px auto;
+            padding: 0 24px 60px;
+        }
+
+        /* ── Messages ── */
+        .messages {
+            margin-bottom: 20px;
+        }
+
+        .msg {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 16px;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+
+        .msg-success {
+            background: var(--green-bg);
+            border: 1px solid #86efac;
+            color: #15803d;
+        }
+
+        .msg-error {
+            background: #fef2f2;
+            border: 1px solid #fca5a5;
+            color: #b91c1c;
+        }
+
+        .msg svg {
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2.2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* ── Card ── */
+        .card {
+            background: var(--white);
+            border-radius: 8px;
+            border: 1px solid var(--gray-200);
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            padding: 24px;
+            margin-bottom: 24px;
+        }
+
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-800);
+            margin-bottom: 16px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .card-title-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: var(--blue);
+            display: inline-block;
+        }
+
+        /* ── Textarea ── */
+        .form-textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid var(--gray-200);
+            border-radius: 6px;
+            font-size: 14px;
+            font-family: inherit;
+            color: var(--gray-800);
+            resize: vertical;
+            outline: none;
+            background: var(--white);
+            transition: border-color 0.15s, box-shadow 0.15s;
+            line-height: 1.5;
+        }
+
+        .form-textarea:focus {
+            border-color: var(--blue);
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.10);
+        }
+
+        .submit-row {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            margin-top: 16px;
+            gap: 12px;
+        }
+
+        .btn-submit {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            background: var(--blue);
+            color: var(--white);
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 500;
+            font-family: inherit;
+            cursor: pointer;
+            transition: background-color 0.15s;
+        }
+
+        .btn-submit:hover {
+            background: var(--blue-d);
+        }
+
+        .btn-submit svg {
+            width: 14px;
+            height: 14px;
+            fill: none;
+            stroke: var(--white);
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        /* ── Posts section ── */
+        .posts-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding-bottom: 8px;
+            border-bottom: 1px solid var(--gray-200);
+        }
+
+        .posts-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--gray-800);
+        }
+
+        .posts-count {
+            background: var(--gray-100);
+            color: var(--gray-600);
+            font-size: 12px;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 12px;
+        }
+
+        /* ── Post card ── */
+        .post-card {
+            background: var(--white);
+            border: 1px solid var(--gray-200);
+            border-radius: 8px;
+            padding: 16px 20px;
+            margin-bottom: 12px;
+            border-left: 4px solid var(--green);
+        }
+
+        .post-text {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--gray-800);
+            white-space: pre-wrap;
+            margin-bottom: 12px;
+        }
+
+        .post-meta {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-wrap: wrap;
+        }
+
+        .post-meta-item {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 12px;
+            color: var(--gray-500);
+        }
+
+        .post-meta-item svg {
+            width: 12px;
+            height: 12px;
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .author-tag {
+            background: var(--gray-100);
+            color: var(--gray-800);
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-weight: 500;
+        }
+
+        /* ── Empty state ── */
+        .empty-state {
+            text-align: center;
+            padding: 48px 0;
+            color: var(--gray-500);
+        }
+
+        .empty-state svg {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 12px;
+            fill: none;
+            stroke: var(--gray-400);
+            stroke-width: 1.5;
+            stroke-linecap: round;
+            stroke-linejoin: round;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="top-stripe"></div>
+
+    <!-- Header -->
+    <header>
+        <div class="header-inner">
+            <div class="header-logo">
+                <div class="header-logo-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 20h9" />
+                        <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4 12.5-12.5z" />
+                    </svg>
+                </div>
+                <h1>Tradexa Assignment</h1>
+            </div>
+            <div class="header-right">
+                <span class="user-badge">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                    </svg>
+                    {{ request.user.username }}
+                </span>
+                <a href="{% url 'logout' %}" class="logout-btn" id="logout-btn">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+                        <polyline points="16 17 21 12 16 7" />
+                        <line x1="21" y1="12" x2="9" y2="12" />
+                    </svg>
+                    Logout
+                </a>
+            </div>
+        </div>
+    </header>
+
+    <main>
+
+        <!-- Flash messages -->
+        {% if messages %}
+        <div class="messages">
+            {% for message in messages %}
+            {% if message.tags == 'success' %}
+            <p class="msg msg-success">
+                <svg viewBox="0 0 24 24">
+                    <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+                    <polyline points="22 4 12 14.01 9 11.01" />
+                </svg>
+                {{ message }}
+            </p>
+            {% else %}
+            <p class="msg msg-error">
+                <svg viewBox="0 0 24 24">
+                    <circle cx="12" cy="12" r="10" />
+                    <line x1="12" y1="8" x2="12" y2="12" />
+                    <line x1="12" y1="16" x2="12.01" y2="16" />
+                </svg>
+                {{ message }}
+            </p>
+            {% endif %}
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        <!-- Post creation form -->
+        <div class="card">
+            <p class="card-title">
+                <span class="card-title-dot"></span>
+                New Post
+            </p>
+            <form method="post" id="post-form">
+                {% csrf_token %}
+                {{ form.text }}
+                {% if form.text.errors %}
+                {% for error in form.text.errors %}
+                <p class="msg msg-error" style="margin-top:8px;">{{ error }}</p>
+                {% endfor %}
+                {% endif %}
+                <div class="submit-row">
+                    <button type="submit" class="btn-submit" id="publish-btn">
+                        <svg viewBox="0 0 24 24">
+                            <line x1="22" y1="2" x2="11" y2="13" />
+                            <polygon points="22 2 15 22 11 13 2 9 22 2" />
+                        </svg>
+                        Publish Post
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Posts list -->
+        <div class="posts-header">
+            <span class="posts-title">Recent Posts</span>
+            <span class="posts-count">{{ posts|length }}</span>
+        </div>
+
+        {% for post in posts %}
+        <div class="post-card">
+            <p class="post-text">{{ post.text }}</p>
+            <div class="post-meta">
+                <span class="post-meta-item author-tag">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+                        <circle cx="12" cy="7" r="4" />
+                    </svg>
+                    {{ post.user.username }}
+                </span>
+                <span class="post-meta-item">
+                    <svg viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="10" />
+                        <polyline points="12 6 12 12 16 14" />
+                    </svg>
+                    {{ post.created_at|date:"d M Y, H:i" }}
+                </span>
+            </div>
+        </div>
+        {% empty %}
+        <div class="empty-state">
+            <svg viewBox="0 0 24 24">
+                <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+            </svg>
+            <p>No posts yet. Start the conversation!</p>
+        </div>
+        {% endfor %}
+
+    </main>
+
+</body>
+
+</html>
